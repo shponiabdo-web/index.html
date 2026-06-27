@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تصكير حسبة - كيماويات وزيوت</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+:root{
+  --bg:#1a1a2e;--bg2:#16213e;--card:#0f3460;
+  --accent:#e94560;--gold:#f5a623;--green:#00d084;
+  --text:#eaeaea;--muted:#8899aa;--border:#1e4a7a;
+  --row1:#0d2137;--row2:#0a1a2e;--inp:#061220;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;background:var(--bg);background-image:radial-gradient(ellipse at 20% 10%,rgba(233,69,96,.12) 0%,transparent 50%),radial-gradient(ellipse at 80% 90%,rgba(245,166,35,.10) 0%,transparent 50%);min-height:100vh;padding:16px 8px 50px;color:var(--text);font-size:14px;}
+.page{max-width:1060px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:0 0 60px rgba(233,69,96,.15),0 0 120px rgba(0,0,0,.6);}
+
+.header{background:linear-gradient(135deg,#0d1b2a,#1a1a3e,#0d2137);border-bottom:2px solid var(--accent);position:relative;overflow:hidden;}
+.header::before{content:'🛢️⚙️🔧🛢️⚙️🔧🛢️⚙️🔧🛢️⚙️';position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);font-size:3.5rem;opacity:.04;letter-spacing:12px;white-space:nowrap;overflow:hidden;}
+.header-inner{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:2;}
+.logo-wrap{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),var(--gold));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.7rem;box-shadow:0 4px 20px rgba(233,69,96,.4);}
+.logo-text h1{font-size:1.25rem;font-weight:900;color:#fff;}
+.logo-text p{font-size:.76rem;color:var(--muted);margin-top:2px;}
+.hbadge{background:rgba(233,69,96,.15);border:1px solid rgba(233,69,96,.4);color:var(--accent);padding:4px 12px;border-radius:20px;font-size:.74rem;font-weight:700;}
+
+.tabs{display:flex;background:#0a1628;border-bottom:2px solid var(--border);}
+.tab{flex:1;padding:12px 8px;text-align:center;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;transition:all .2s;}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);background:var(--bg2);}
+.tab:hover:not(.active){color:var(--text);background:#0d1f33;}
+
+.panel{display:none;}.panel.active{display:block;}
+
+.datebar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;font-size:.83rem;color:var(--muted);flex-wrap:wrap;}
+.datebar label{color:var(--gold);font-weight:700;}
+.datebar input[type=date]{background:var(--inp);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-family:'Cairo',sans-serif;font-size:.83rem;color:var(--text);cursor:pointer;outline:none;}
+.datebar input[type=date]:focus{border-color:var(--accent);}
+#dateAr{color:#fff;font-weight:700;}
+
+.sec{padding:14px 20px 7px;font-size:.88rem;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:10px;background:var(--bg2);border-top:1px solid var(--border);}
+.sec-icon{width:26px;height:26px;background:linear-gradient(135deg,var(--accent),var(--gold));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;}
+
+.tw{background:var(--bg2);padding:0 14px 10px;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.86rem;}
+thead tr{background:var(--card);}
+thead th{color:#cde;padding:9px 11px;text-align:center;font-weight:700;border:1px solid var(--border);white-space:nowrap;font-size:.79rem;}
+thead th.sub{background:#0a2540;font-size:.73rem;color:var(--muted);}
+thead th.sub-s{background:#0a2a1a;font-size:.73rem;color:#7ecfa0;}
+thead th.sub-e{background:#1a1a0a;font-size:.73rem;color:#c8b060;}
+tbody tr:nth-child(odd){background:var(--row1);}
+tbody tr:nth-child(even){background:var(--row2);}
+tbody tr:hover{background:#0d2a45;}
+tbody td{padding:8px 10px;text-align:center;border:1px solid #152a3e;color:var(--text);outline:none;min-width:72px;direction:ltr;}
+tbody td.lbl{text-align:right;direction:rtl;font-weight:700;color:#aaccee;background:#091828!important;min-width:155px;border-right:3px solid var(--accent);}
+tbody td[contenteditable="true"]:focus{background:#0d2010;border-color:var(--green);color:#fff;}
+td.total-row{font-weight:900;background:#071a10!important;color:var(--green)!important;font-size:.93rem;direction:ltr;}
+td.diff-pos{font-weight:900;color:var(--green)!important;background:#071a10!important;direction:ltr;}
+td.diff-neg{font-weight:900;color:var(--accent)!important;background:#1a0710!important;direction:ltr;}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 16px 16px;background:var(--bg2);border-top:1px solid var(--border);}
+@media(max-width:580px){.cards{grid-template-columns:repeat(2,1fr);}}
+.scard{border-radius:11px;padding:12px 12px 10px;text-align:center;border:1px solid transparent;}
+.scard.c-navy{background:#0a1e36;border-color:#1e4a7a;}
+.scard.c-green{background:#071a10;border-color:#00d084;}
+.scard.c-red{background:#1a0710;border-color:var(--accent);}
+.scard.c-gold覆盖{background:#1a1207;border-color:var(--gold);}
+.scard.c-purple{background:#120a1a;border-color:#9b59b6;}
+.sc-label{font-size:.7rem;color:var(--muted);font-weight:600;margin-bottom:5px;}
+.sc-val{font-size:1.15rem;font-weight:900;direction:ltr;}
+.scard.c-navy .sc-val{color:#6ab0f5;}
+.scard.c-green .sc-val{color:var(--green);}
+.scard.c-red .sc-val{color:var(--accent);}
+.scard.c-gold .sc-val{color:var(--gold);}
+.scard.c-purple .sc-val{color:#bb8fce;}
+
+.actions{display:flex;gap:8px;padding:12px 16px 18px;justify-content:flex-end;background:var(--bg2);border-top:1px solid var(--border);flex-wrap:wrap;}
+.btn{padding:9px 18px;border-radius:9px;border:none;font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;transition:all .15s;}
+.btn:hover{transform:translateY(-1px);}
+.btn-save{background:linear-gradient(135deg,var(--green),#00a86b);color:#000;box-shadow:0 3px 12px rgba(0,208,132,.3);}
+.btn-print{background:linear-gradient(135deg,var(--accent),#c0392b);color:#fff;box-shadow:0 3px 12px rgba(233,69,96,.35);}
+.btn-outline{background:transparent;color:var(--gold);border:1.5px solid var(--gold);}
+.btn-del{background:transparent;color:var(--accent);border:1.5px solid var(--accent);font-size:.78rem;padding:6px 12px;}
+
+.hist-wrap{background:var(--bg2);padding:16px;}
+.hist-search{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.hist-search input{flex:1;min-width:140px;background:var(--inp);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-family:'Cairo',sans-serif;font-size:.85rem;outline:none;}
+.hist-search input:focus{border-color:var(--gold);}
+.hist-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.9rem;}
+.hist-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.9rem;}
+.hist-table{width:100%;border-collapse:collapse;font-size:.81rem;}
+.hist-table thead tr{background:var(--card);}
+.hist-table thead th{color:#cde;padding:8px 9px;border:1px solid var(--border);font-weight:700;white-space:nowrap;font-size:.78rem;}
+.hist-table tbody tr{cursor:pointer;}
+.hist-table tbody tr:nth-child(odd){background:var(--row1);}
+.hist-table tbody tr:nth-child(even){background:var(--row2);}
+.hist-table tbody tr:hover{background:#0d3a5a;}
+.hist-table tbody td{padding:7px 9px;border:1px solid #152a3e;text-align:center;direction:ltr;}
+.hist-table tbody td.dt{direction:rtl;text-align:right;color:#aaccee;font-weight:700;}
+.tag-ok{color:var(--green);font-weight:800;}
+.tag-no{color:var(--accent);font-weight:800;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#000;font-weight:800;padding:12px 28px;border-radius:30px;font-size:.88rem;opacity:0;transition:all .35s;z-index:999;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.err{background:var(--accent);color:#fff;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:900;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:#0d1f35;border:1px solid var(--border);border-radius:16px;padding:24px;max-width:500px;width:92%;max-height:90vh;overflow-y:auto;}
+.modal h3{color:var(--gold);font-size:1rem;margin-bottom:16px;font-weight:800;}
+.modal-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #152a3e;font-size:.83rem;}
+.modal-row .ml{color:var(--muted);}
+.modal-row .mr{color:#fff;font-weight:700;direction:ltr;}
+.modal-row .mr.pos{color:var(--green);}
+.modal-row .mr.neg{color:var(--accent);}
+.modal-close{margin-top:16px;width:100%;}
+
+@media print{body{background:#fff;padding:0;color:#000;}.page{box-shadow:none;border:none;}.actions,.tabs,.panel:not(.active){display:none;}.panel.active{display:block;}.header{background:#1a1a2e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-icon">🛢️</div>
+      <div class="logo-text">
+        <h1>محل الكيماويات والزيوت</h1>
+        <p>نموذج تصكير الحسبة اليومية — مع حفظ تلقائي</p>
+      </div>
+    </div>
+    <span class="hbadge">⚙️ إدارة الحسابات</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('entry')">📝 تصكير اليوم</div>
+  <div class="tab" onclick="showTab('history')">📚 السجل التاريخي</div>
+</div>
+
+<div class="panel active" id="panel-entry">
+
+  <div class="datebar">
+    <label>📅 التاريخ:</label>
+    <input type="date" id="dateInput">
+    <span id="dateAr"></span>
+  </div>
+
+  <div class="sec"><div class="sec-icon">💵</div> المبيعات النقدية والاسترجاع</div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">البيان</th>
+          <th colspan="2" style="background:#0a2a1a;color:#7ecfa0;">🌅 فترة الصباح</th>
+          <th colspan="2" style="background:#1a1a0a;color:#c8b060;">🌙 فترة المساء</th>
+          <th rowspan="2">الإجمالي</th>
+        </tr>
+        <tr>
+          <th class="sub-s">المبلغ (ج.م)</th><th class="sub-s">ملاحظات</th>
+          <th class="sub-e">المبلغ (ج.م)</th><th class="sub-e">ملاحظات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lbl">💵 القيمة النقدية</td>
+          <td contenteditable="true" id="cash_s"></td>
+          <td contenteditable="true" id="note_cs"></td>
+          <td contenteditable="true" id="cash_e"></td>
+          <td contenteditable="true" id="note_ce"></td>
+          <td class="total-row" id="cash_total">0.00</td>
+        </tr>
+        <tr>
+          <td class="lbl">↩️ الاسترجاع (المرتجعات)</td>
+          <td contenteditable="true" id="ret_s"></td>
+          <td contenteditable="true" id="note_rs"></td>
+          <td contenteditable="true" id="ret_e"></td>
+          <td contenteditable="true" id="note_re"></td>
+          <td class="total-row" id="ret_total">0.00</td>
+        </tr>
+        <tr>
+          <td class="lbl" style="color:var(--green);">📊 صافي النقدية</td>
+          <td id="net_s" class="total-row"></td>
+          <td></td>
+          <td id="net_e" class="total-row"></td>
+          <td></td>
+          <td id="net_total" class="total-row">0.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">💳</div> البطاقة المصرفية (Visa / POS)</div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">البيان</th>
+          <th colspan="2" style="background:#0a2a1a;color:#7ecfa0;">🌅 فترة الصباح</th>
+          <th colspan="2" style="background:#1a1a0a;color:#c8b060;">🌙 فترة المساء</th>
+          <th rowspan="2">الإجمالي</th>
+        </tr>
+        <tr>
+          <th class="sub-s">المبلغ (ج.م)</th><th class="sub-s">ملاحظات</th>
+          <th class="sub-e">المبلغ (ج.م)</th><th class="sub-e">ملاحظات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lbl">💳 بطاقة الدفع</td>
+          <td contenteditable="true" id="card_s"></td>
+          <td contenteditable="true" id="note_cds"></td>
+          <td contenteditable="true" id="card_e"></td>
+          <td contenteditable="true" id="note_cde"></td>
+          <td class="total-row" id="card_total">0.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">📱</div> الحوالة البنكية / موبايل</div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">البيان</th>
+          <th colspan="2" style="background:#0a2a1a;color:#7ecfa0;">🌅 فترة الصباح</th>
+          <th colspan="2" style="background:#1a1a0a;color:#c8b060;">🌙 فترة المساء</th>
+          <th rowspan="2">الإجمالي</th>
+        </tr>
+        <tr>
+          <th class="sub-s">المبلغ (ج.م)</th><th class="sub-s">ملاحظات</th>
+          <th class="sub-e">المبلغ (ج.م)</th><th class="sub-e">ملاحظات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lbl">📱 حوالة / تحويل</td>
+          <td contenteditable="true" id="tr_s"></td>
+          <td contenteditable="true" id="note_trs"></td>
+          <td contenteditable="true" id="tr_e"></td>
+          <td contenteditable="true" id="note_tre"></td>
+          <td class="total-row" id="tr_total">0.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">🖥️</div> المنظومة (النظام)</div>
+  <div class="tw">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2">البيان</th>
+          <th colspan="2" style="background:#0a2a1a;color:#7ecfa0;">🌅 فترة الصباح</th>
+          <th colspan="2" style="background:#1a1a0a;color:#c8b060;">🌙 فترة المساء</th>
+          <th rowspan="2">إجمالي المنظومة</th>
+        </tr>
+        <tr>
+          <th class="sub-s">المبلغ (ج.م)</th><th class="sub-s">ملاحظات</th>
+          <th class="sub-e">المبلغ (ج.م)</th><th class="sub-e">ملاحظات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="lbl">🖥️ قيمة المنظومة</td>
+          <td contenteditable="true" id="sys_s"></td>
+          <td contenteditable="true" id="note_sys_s"></td>
+          <td contenteditable="true" id="sys_e"></td>
+          <td contenteditable="true" id="note_sys_e"></td>
+          <td class="total-row" id="sys_total">0.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">👤</div> الدفع على حساب المرتب</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>الاسم</th><th>القيمة المأخوذة (ج.م)</th><th>البيان / السبب</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">👤 حسام</td><td contenteditable="true" id="hussam"></td><td contenteditable="true" id="note_h"></td></tr>
+        <tr><td class="lbl">👤 ربيع</td><td contenteditable="true" id="rabie"></td><td contenteditable="true" id="note_r"></td></tr>
+        <tr><td class="lbl">👤 محمد</td><td contenteditable="true" id="mohamed"></td><td contenteditable="true" id="note_m"></td></tr>
+        <tr><td class="lbl" style="color:var(--accent)">📊 إجمالي المرتبات</td><td id="salaryTotal" class="total-row">0.00</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">🧾</div> المصروفات</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>الاسم / البيان</th><th>القيمة (ج.م)</th><th>التفاصيل</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">🧾 مصروفات محمد</td><td contenteditable="true" id="exp_m"></td><td contenteditable="true" id="enote_m"></td></tr>
+        <tr><td class="lbl">🧾 مصروفات حسام</td><td contenteditable="true" id="exp_h"></td><td contenteditable="true" id="enote_h"></td></tr>
+        <tr><td class="lbl">🧾 مصروفات ربيع</td><td contenteditable="true" id="exp_r"></td><td contenteditable="true" id="enote_r"></td></tr>
+        <tr><td class="lbl" style="color:var(--accent)">📊 إجمالي المصروفات</td><td id="expTotal" class="total-row">0.00</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">⚖️</div> الفوارق</div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>البيان</th><th>القيمة (ج.م)</th><th>ملاحظات</th></tr></thead>
+      <tbody>
+        <tr><td class="lbl">📊 القيمة الإجمالية اليومية</td><td id="dailyTotal" class="total-row">0.00</td><td style="color:var(--muted);font-size:.78rem;">(محسوبة تلقائياً)</td></tr>
+        <tr><td class="lbl">🖥️ إجمالي المنظومة</td><td id="sysShow" class="total-row">0.00</td><td></td></tr>
+        <tr><td class="lbl" style="color:var(--gold)">⚖️ الفارق (منظومة − إجمالي)</td><td id="diff" class="total-row">0.00</td><td id="diffNote" style="font-weight:700;font-size:.83rem;"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-icon">📋</div> ملخص اليوم</div>
+  <div class="cards">
+    <div class="scard c-navy"><div class="sc-label">💵 صافي النقدية</div><div class="sc-val" id="s_cash">0.00</div></div>
+    <div class="scard c-purple"><div class="sc-label">↩️ إجمالي الاسترجاع</div><div class="sc-val" id="s_ret">0.00</div></div>
+    <div class="scard c-navy"><div class="sc-label">💳 بطاقة + حوالة</div><div class="sc-val" id="s_elec">0.00</div></div>
+    <div class="scard c-red"><div class="sc-label">👤 مرتبات</div><div class="sc-val" id="s_sal">0.00</div></div>
+    <div class="scard c-red"><div class="sc-label">🧾 مصروفات</div><div class="sc-val" id="s_exp">0.00</div></div>
+    <div class="scard c-green"><div class="sc-label">📊 الإجمالي اليومي</div><div class="sc-val" id="s_daily">0.00</div></div>
+    <div class="scard c-gold"><div class="sc-label">🖥️ المنظومة</div><div class="sc-val" id="s_sys">0.00</div></div>
+    <div class="scard c-gold"><div class="sc-label">⚖️ الفارق</div><div class="sc-val" id="s_diff">0.00</div></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-outline" onclick="clearForm()">🗑️ مسح</button>
+    <button class="btn btn-print" onclick="window.print()">🖨️ طباعة</button>
+    <button class="btn btn-save" onclick="saveDay()">💾 حفظ اليوم</button>
+  </div>
+</div>
+
+<div class="panel" id="panel-history">
+  <div class="hist-wrap">
+    <div class="hist-search">
+      <input type="text" id="histSearch" placeholder="🔍 ابحث بالتاريخ..." oninput="renderHistory()">
+      <input type="month" id="histMonth" oninput="renderHistory()" style="max-width:160px;background:var(--inp);border:1px solid var(--border);border-radius:8px;padding:7px 10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:.84rem;outline:none;">
+    </div>
+    <div id="histContainer"></div>
+  </div>
+</div>
+
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">تفاصيل اليوم</h3>
+    <div id="modalBody"></div>
+    <button class="btn btn-outline modal-close" onclick="closeModal()">✖ إغلاق</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const g = id => document.getElementById(id);
+const fmt = n => Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const DAYS=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+const MONTHS=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+
+function fmtDate(v){
+  const d=new Date(v+'T00:00:00');
+  return DAYS[d.getDay()]+' '+d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();
+}
+
+// date init
+g('dateInput').valueAsDate=new Date();
+g('dateAr').textContent=fmtDate(g('dateInput').value);
+g('dateInput').addEventListener('change',()=>{
+  g('dateAr').textContent=fmtDate(g('dateInput').value);
+  loadDay(g('dateInput').value);
+});
+
+// get number from contenteditable
+const num = id => parseFloat((g(id)?.innerText||'').replace(/,/g,'').trim())||0;
+
+// set text
+const setText = (id,v) => { if(g(id)) g(id).textContent=v; };
+
+function recalc(){
+  // cash
+  const cs=num('cash_s'), ce=num('cash_e'), cashRaw=cs+ce;
+  const rs=num('ret_s'),  re=num('ret_e'),  retTot=rs+re;
+  const ns=cs-rs, ne=ce-re, netTot=cashRaw-retTot;
+  setText('cash_total', fmt(cashRaw));
+  setText('ret_total',  fmt(retTot));
+  setText('net_s',      fmt(ns));
+  setText('net_e',      fmt(ne));
+  setText('net_total',  fmt(netTot));
+
+  // card
+  const cds=num('card_s'), cde=num('card_e'), cardTot=cds+cde;
+  setText('card_total', fmt(cardTot));
+
+  // transfer
+  const trs=num('tr_s'), tre=num('tr_e'), trTot=trs+tre;
+  setText('tr_total', fmt(trTot));
+
+  // system
+  const syss=num('sys_s'), syse=num('sys_e'), sysTot=syss+syse;
+  setText('sys_total', fmt(sysTot));
+  setText('sysShow',   fmt(sysTot));
+
+  // salary
+  const salTot=num('hussam')+num('rabie')+num('mohamed');
+  setText('salaryTotal', fmt(salTot));
+
+  // expenses
+  const expTot=num('exp_m')+num('exp_h')+num('exp_r');
+  setText('expTotal', fmt(expTot));
+
+  // daily total = net cash + card + transfer + salary + expenses
+  const daily = netTot + cardTot + trTot + salTot + expTot;
+  const diff  = sysTot - daily;
+
+  setText('dailyTotal', fmt(daily));
+  setText('s_cash',  fmt(netTot));
+  setText('s_ret',   fmt(retTot));
+  setText('s_elec',  fmt(cardTot+trTot));
+  setText('s_sal',   fmt(salTot));
+  setText('s_exp',   fmt(expTot));
+  setText('s_daily', fmt(daily));
+  setText('s_sys',   fmt(sysTot));
+
+  g('diff').textContent=fmt(Math.abs(diff));
+  if(diff>0){g('diff').className='diff-pos total-row';g('diffNote').textContent='✅ المنظومة أعلى';g('diffNote').style.color='var(--green)';}
+  else if(diff<0){g('diff').className='diff-neg total-row';g('diffNote').textContent='⚠️ المنظومة أقل';g('diffNote').style.color='var(--accent)';}
+  else{g('diff').className='total-row';g('diffNote').textContent='✔️ متطابق';g('diffNote').style.color='var(--muted)';}
+
+  const sd=g('s_diff');
+  sd.textContent=(diff>=0?'+':'-')+fmt(Math.abs(diff));
+  sd.style.color=diff>=0?'var(--green)':'var(--accent)';
+}
+
+document.querySelectorAll('[contenteditable="true"]').forEach(el=>el.addEventListener('input',recalc));
+
+// fields to save/load
+const FIELDS=['cash_s','note_cs','cash_e','note_ce',
+              'ret_s','note_rs','ret_e','note_re',
+              'card_s','note_cds','card_e','note_cde',
+              'tr_s','note_trs','tr_e','note_tre',
+              'sys_s','note_sys_s','sys_e','note_sys_e',
+              'hussam','note_h','rabie','note_r','mohamed','note_m',
+              'exp_m','enote_m','exp_h','enote_h','exp_r','enote_r'];
+
+function collect(){
+  const o={date:g('dateInput').value};
+  FIELDS.forEach(f=>o[f]=(g(f)?.innerText||'').trim());
+  // computed
+  const cs=+o.cash_s||0, ce=+o.cash_e||0;
+  const rs=+o.ret_s||0,  re=+o.ret_e||0;
+  const cds=+o.card_s||0,cde=+o.card_e||0;
+  const trs=+o.tr_s||0,  tre=+o.tr_e||0;
+  const ss=+o.sys_s||0,  se=+o.sys_e||0;
+  o.cashRaw=cs+ce; o.retTot=rs+re; o.netCash=(cs-rs)+(ce-re);
+  o.cardTot=cds+cde; o.trTot=trs+tre;
+  o.sysTot=ss+se;
+  o.salTot=(+o.hussam||0)+(+o.rabie||0)+(+o.mohamed||0);
+  o.expTot=(+o.exp_m||0)+(+o.exp_h||0)+(+o.exp_r||0);
+  o.daily=o.netCash+o.cardTot+o.trTot+o.salTot+o.expTot;
+  o.diff=o.sysTot-o.daily;
+  return o;
+}
+
+function fill(o){
+  FIELDS.forEach(f=>{if(g(f))g(f).textContent=o[f]||'';});
+  recalc();
+}
+
+const KEY='mahaly_v2';
+function loadLS(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch{return {};}}
+function saveLS(d){localStorage.setItem(KEY,JSON.stringify(d));}
+
+function saveDay(){
+  const o=collect();
+  if(!o.date){toast('اختر التاريخ أولاً','err');return;}
+  const d=loadLS(); d[o.date]=o; saveLS(d);
+  toast('✅ تم حفظ '+fmtDate(o.date));
+  renderHistory();
+}
+
+function loadDay(date){
+  const d=loadLS();
+  if(d[date])fill(d[date]);
+  else clearForm(false);
+}
+
+function deleteDay(date){
+  if(!confirm('حذف يوم '+fmtDate(date)+'؟'))return;
+  const d=loadLS(); delete d[date]; saveLS(d);
+  renderHistory(); toast('🗑️ تم الحذف','err');
+}
+
+function clearForm(ask=true){
+  if(ask&&!confirm('مسح بيانات اليوم الحالي؟'))return;
+  FIELDS.forEach(f=>{if(g(f))g(f).textContent='';});
+  recalc();
+}
+
+function renderHistory(){
+  const data=loadLS();
+  const search=(g('histSearch').value||'').trim();
+  const month=g('histMonth').value||'';
+  let keys=Object.keys(data).sort((a,b)=>b.localeCompare(a));
+  if(search)keys=keys.filter(k=>fmtDate(k).includes(search)||k.includes(search));
+  if(month)keys=keys.filter(k=>k.startsWith(month));
+  const con=g('histContainer');
+  if(!keys.length){con.innerHTML='<div class="hist-empty">📭 لا توجد أيام محفوظة بعد</div>';return;}
+  let html=`<div style="overflow-x:auto"><table class="hist-table"><thead><tr>
+    <th>التاريخ</th><th>صافي نقدية</th><th>استرجاع</th><th>بطاقة</th><th>حوالة</th>
+    <th>مرتبات</th><th>مصروفات</th><th>الإجمالي</th><th>منظومة</th><th>الفارق</th><th></th>
+  </tr></thead><tbody>`;
+  keys.forEach(k=>{
+    const o=data[k];
+    const dc=o.diff>0?'tag-ok':o.diff<0?'tag-no':'';
+    const dt=(o.diff>=0?'+':'-')+fmt(Math.abs(o.diff||0));
+    html+=`<tr onclick="openModal('${k}')">
+      <td class="dt">${fmtDate(k)}</td>
+      <td>${fmt(o.netCash||0)}</td>
+      <td style="color:#bb8fce">${fmt(o.retTot||0)}</td>
+      <td>${fmt(o.cardTot||0)}</td>
+      <td>${fmt(o.trTot||0)}</td>
+      <td style="color:var(--accent)">${fmt(o.salTot||0)}</td>
+      <td style="color:var(--accent)">${fmt(o.expTot||0)}</td>
+      <td style="color:var(--green);font-weight:800">${fmt(o.daily||0)}</td>
+      <td style="color:var(--gold)">${fmt(o.sysTot||0)}</td>
+      <td class="${dc}">${dt}</td>
+      <td><button class="btn btn-del" onclick="event.stopPropagation();deleteDay('${k}')">🗑️</button></td>
+    </tr>`;
+  });
+  html+='</tbody></table></div>';
+  con.innerHTML=html;
+}
+
+function openModal(date){
+  const d=loadLS(); const o=d[date]; if(!o)return;
+  g('modalTitle').textContent='📋 تفاصيل '+fmtDate(date);
+  const rows=[
+    ['💵 نقدية الصباح',o.cash_s],['🌙 نقدية المساء',o.cash_e],['💵 إجمالي النقدية',fmt(o.cashRaw||0),'pos'],
+    ['↩️ استرجاع الصباح',o.ret_s],['↩️ استرجاع المساء',o.ret_e],['↩️ إجمالي الاسترجاع',fmt(o.retTot||0)],
+    ['📊 صافي النقدية',fmt(o.netCash||0),'pos'],
+    ['💳 بطاقة الصباح',o.card_s],['💳 بطاقة المساء',o.card_e],['💳 إجمالي البطاقة',fmt(o.cardTot||0),'pos'],
+    ['📱 حوالة الصباح',o.tr_s],['📱 حوالة المساء',o.tr_e],['📱 إجمالي الحوالة',fmt(o.trTot||0),'pos'],
+    ['🖥️ منظومة الصباح',o.sys_s],['🖥️ منظومة المساء',o.sys_e],['🖥️ إجمالي المنظومة',fmt(o.sysTot||0),'pos'],
+    ['👤 حسام',o.hussam],['👤 ربيع',o.rabie],['👤 محمد',o.mohamed],['📊 إجمالي المرتبات',fmt(o.salTot||0)],
+    ['🧾 مصروفات محمد',o.exp_m],['🧾 مصروفات حسام',o.exp_h],['🧾 مصروفات ربيع',o.exp_r],['📊 إجمالي المصروفات',fmt(o.expTot||0)],
+    ['📊 الإجمالي اليومي',fmt(o.daily||0),'pos'],
+    ['⚖️ الفارق',(o.diff>=0?'+':'-')+fmt(Math.abs(o.diff||0)),o.diff>=0?'pos':'neg'],
+  ];
+  g('modalBody').innerHTML=rows.map(r=>`<div class="modal-row"><span class="ml">${r[0]}</span><span class="mr ${r[2]||''}">${r[1]||'—'}</span></div>`).join('');
+  g('modalBg').classList.add('open');
+  fill(o); g('dateInput').value=date; g('dateAr').textContent=fmtDate(date);
+}
+function closeModal(){g('modalBg').classList.remove('open');}
+g('modalBg').addEventListener('click',e=>{if(e.target===g('modalBg'))closeModal();});
+
+function showTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['entry','history'][i]===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  g('panel-'+name).classList.add('active');
+  if(name==='history')renderHistory();
+}
+
+function toast(msg,type=''){
+  const t=g('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+loadDay(g('dateInput').value);
+recalc();
+</script>
+</body>
+</html>
